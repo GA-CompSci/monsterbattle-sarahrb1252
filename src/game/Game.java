@@ -56,30 +56,30 @@ public class Game {
 
         // CHOOSE DIFFICULTY (number of monsters to face)
         int numMonsters = chooseDifficulty();
-        //Should we add special abbilities
-        monsters = new ArrayList<>();
-        for (int k = 0 ; k < numMonsters; k++) monsters.add(new Monster());
 
+        monsters = new ArrayList<>();
+        for (int k = 0 ; k < numMonsters; k++){
+            if(k==0){   //Should we add special abbilities
+                // add a monster with a special ability
+                monsters.add(new Monster("Vampire"));
+            }else{
+                monsters.add(new Monster());
+            }
+        }
         gui.updateMonsters(monsters);
 
-        maxHealth = 100;  // Change this if you want
-        playerHealth = 100;
-        gui.setPlayerMaxHealth(maxHealth);
-        gui.updatePlayerHealth(playerHealth);
-       
-        
-         // PICK YOUR CHARACTER BUILD (using the 4 action buttons!)
+        // PICK YOUR CHARACTER BUILD (using the 4 action buttons!)
         pickCharacterBuild();
-        
-
         
         // TODO: Create starting items
         inventory = new ArrayList<>();
         // Add items here! Look at GameDemo.java for examples
         gui.updateInventory(inventory);
         
-        // TODO: Customize button labels
-        String[] buttons = {"Attack", "Defend", "Heal", "Use Item"};
+        String[] buttons = {"Attack (" + playerDamage + ")",
+                            "Defend (" + playerShield + ")",
+                            "Heal(" + playerHeal + ")", 
+                            "Use Item"};
         gui.setActionButtons(buttons);
         
         // Welcome message
@@ -187,10 +187,29 @@ public class Game {
      * - Special effects?
      */
     private void attackMonster() {
-        // TODO: Implement your attack!
-        // Hint: Look at GameDemo.java for an example
-        
-        gui.displayMessage("TODO: Implement attack!");
+        //TODO target more inteligetntly
+       Monster target = getRandomLivingMonster();//MAKE IT FOR THE WEAKEST MOSNTER
+       int damage = playerDamage;//0-player damage
+       if (damage == 0){
+        //hiurt ursled
+        playerHealth -= 5;
+        gui.displayMessage("critical fail!! You hit yourself!!");
+        gui.updatePlayerHealth(playerHealth);
+       }else if (damage == playerDamage) {
+        gui.displayMessage("Critical Hit! You slayed the monster");
+        target.takeDamage(target.health());
+
+       }else{
+        target.takeDamage(damage);
+        gui.displayMessage("You hit the mosnter for" + damage + " damage");
+       }
+        // Show which one we hit
+            int index = monsters.indexOf(target);
+            gui.highlightMonster(index);
+            gui.pause(300);
+            gui.highlightMonster(-1);
+        //update list
+       gui.updateMonsters(monsters);
     }
     
     /**
@@ -249,41 +268,8 @@ public class Game {
         
         gui.displayMessage("TODO: Implement monster attack!");
     }
-    
-    // ==================== HELPER METHODS ====================
-    // Add your own helper methods here!
-    
+
     /**
-     * Count how many monsters are still alive
-     */
-    private int countLivingMonsters() {
-        int count = 0;
-        for (Monster m : monsters) {
-            if (m.health() > 0) count++;
-        }
-        return count;
-    }
-    
-    /**
-     * Get a random living monster
-     */
-    private Monster getRandomLivingMonster() {
-        ArrayList<Monster> alive = new ArrayList<>();
-        for (Monster m : monsters) {
-            if (m.health() > 0) alive.add(m);
-        }
-        if (alive.isEmpty()) return null;
-        return alive.get((int)(Math.random() * alive.size()));
-    }
-    
-    // TODO: Add more helper methods as you need them!
-    // Examples:
-    // - Method to find the strongest monster
-    // - Method to check if player has a specific item
-    // - Method to add special effects
-    // - etc.
-}
- /**
      * Let player pick their character build using the 4 buttons
      * This demonstrates using the GUI for menu choices!
      */
@@ -334,3 +320,53 @@ public class Game {
         gui.pause(1500);
     }
     
+    // ==================== HELPER METHODS ====================
+    // Add your own helper methods here!
+    
+    /**
+     * Count how many monsters are still alive
+     */
+    private int countLivingMonsters() {
+        int count = 0;
+        for (Monster m : monsters) {
+            if (m.health() > 0) count++;
+        }
+        return count;
+    }
+    
+    private ArrayList<Monster> getSpecialMonsters(){
+        ArrayList<Monster> result = new ArrayList<>();
+        for (Monster m : monsters){
+            if (m.special() != null && m.special().equals("")&& m.health()>0){
+                result.add(m);
+            }
+        }
+        return result;
+    }
+    private ArrayList <Monster> getSpeedMonsters(){
+        ArrayList<Monster> result = new ArrayList<>();
+        for (Monster m: monsters){
+            if (m.speed()>playerSpeed && m.health()>0){
+                result.add(m);
+            }
+        }
+        return result;
+    }
+
+    private Monster getRandomLivingMonster() {
+        ArrayList<Monster> alive = new ArrayList<>();
+        for (Monster m : monsters) {
+            if (m.health() > 0) alive.add(m);
+        }
+        if (alive.isEmpty()) return null;
+        return alive.get((int)(Math.random() * alive.size()));
+    }
+    
+    // TODO: Add more helper methods as you need them!
+    // Examples:
+    // - Method to find the strongest monster
+    // - Method to check if player has a specific item
+    // - Method to add special effects
+    // - etc.
+
+}
