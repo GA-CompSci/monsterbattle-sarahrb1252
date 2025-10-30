@@ -29,6 +29,8 @@ public class Game {
     private int playerDamage;
     private int playerHeal;
     private int playerShield;
+    private Monster lastAttacked;//store the monster we last attacked so it can attack back
+    private boolean shelidUp = false;
     /**
      * Main method - start YOUR game!
      */
@@ -95,6 +97,7 @@ public class Game {
     private void gameLoop() {
         // Keep playing while monsters alive and player alive
         while (countLivingMonsters() > 0 && playerHealth > 0) {
+            shelidUp = false; // start of turn lower turn 
             
             // PLAYER'S TURN
             gui.displayMessage("Your turn! HP: " + playerHealth);
@@ -134,17 +137,17 @@ public class Game {
         int choice = gui.waitForAction();
         int numMonsters = 0;
         switch (choice) {
-            case 0:
-                numMonsters = (int)(Math.random()*(4-2+1)+2);
+            case 0: // 3-4   (math.random * range+1) + min
+                numMonsters = (int)(Math.random()*2)+3;
                 break;
-            case 1:
-            numMonsters = (int)(Math.random()*(5-3+1)+2);
+            case 1: // 4-5
+            numMonsters = (int)(Math.random()*(2)+4);
                 break;
-            case 2:
-                numMonsters = (int)(Math.random()*(6-4+1)+2);
+            case 2: // 6-8
+                numMonsters = (int)(Math.random()*(3)+6);
                 break;
-            case 3: 
-                numMonsters = (int)(Math.random()*(8-6+1)+2);
+            case 3: // 10-15
+                numMonsters = (int)(Math.random()*(6)+10);
                 break;
             default:
                 break;
@@ -189,7 +192,8 @@ public class Game {
     private void attackMonster() {
         //TODO target more inteligetntly
        Monster target = getRandomLivingMonster();//MAKE IT FOR THE WEAKEST MOSNTER
-       int damage = playerDamage;//0-player damage
+       lastAttacked = target;
+       int damage = (int)(Math.random()*playerDamage + 1);//0-player damage
        if (damage == 0){
         //hiurt ursled
         playerHealth -= 5;
@@ -222,6 +226,7 @@ public class Game {
      */
     private void defend() {
         // TODO: Implement your defend!
+        shelidUp = true;
         
         gui.displayMessage("TODO: Implement defend!");
     }
@@ -263,10 +268,29 @@ public class Game {
      * - Special abilities?
      */
     private void monsterAttack() {
-        // TODO: Implement monster attacks!
-        // Hint: Look at GameDemo.java for an example
-        
-        gui.displayMessage("TODO: Implement monster attack!");
+       
+        ArrayList<Monster> attackers = getSpeedMonsters();
+        if(lastAttacked.health()> 0 && attackers.contains(lastAttacked)){
+            attackers.add(lastAttacked);
+
+        for (Monster m : attackers){
+        if(shelidUp){
+            double incomingDamage = m.damage();
+            //TODO finish logic for repeted hits on the sheild
+            incomingDamage -= playerShield;
+            gui.displayMessage("You blocked for " + playerShield+ " damage");
+
+        }
+        playerHealth -= m.damage();
+            gui.updatePlayerHealth(playerHealth);;
+        // Show which one we hit
+            int index = monsters.indexOf(m);
+            gui.highlightMonster(index);
+            gui.pause(300);
+            gui.highlightMonster(-1);
+        }
+        }
+
     }
 
     /**
