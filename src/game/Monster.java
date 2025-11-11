@@ -33,4 +33,7 @@ public class Monster {
     public void takeDamage(int dmg){
         health -= dmg;
     }
+    public void heal(int healValue){
+        health += healValue;
+    }
 }
