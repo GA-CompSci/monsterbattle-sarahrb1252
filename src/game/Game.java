@@ -156,7 +156,7 @@ public class Game {
                 break;
         }
 
-        gui.displayMessage("You will face " + numMonsters + " monsters! Good Luck");
+        gui.displayMessage( "You will face " + numMonsters + " monsters! Good Luck");
         gui.pause(1500);
 
         return numMonsters;
@@ -179,7 +179,7 @@ public class Game {
                 heal();
                 break;
             case 3: // Use Item button
-                useItem();
+                SpecialAbbility();
                 break;
         }
     }
@@ -249,7 +249,7 @@ public class Game {
     /**
      * Use an item from inventory
      */
-    private void useItem() {
+    private void SpecialAbbility() {
         if (inventory.isEmpty()) {
             gui.displayMessage("No items in inventory!");
             return;
@@ -301,8 +301,7 @@ public class Game {
                 double absorbance = Math.min(damageTaken, shelidPower);
                 damageTaken -= absorbance;
                 shelidPower -= absorbance;
-                gui.displayMessage(
-                        "You block for " + absorbance + " damage. You have " + shelidPower + " shield left.");
+                gui.displayMessage("You block for " + absorbance + " damage. You have " + shelidPower + " shield left.");
             }
             if (damageTaken > 0) {
                 playerHealth -= damageTaken;
@@ -347,11 +346,13 @@ public class Game {
             playerHeal -= (int) (Math.random() * 20 + 1) + 5; // Reduce heal by 5-50
 
             playerSpeed -= (int) (Math.random() * 6) + 5; // Reduce speed by 1-9
+            gui.displayMessage(" Player Stats --  Shield: " + playerShield + "  Healing Power: " + playerHeal);
         } else if (choice == 1) {
             // Tank: high shield, low damage and speed
             gui.displayMessage("You chose Tank! Tough defense, but slow attacks.");
             playerSpeed -= (int) (Math.random() * 9) + 1; // Reduce speed by 1-9
             playerDamage -= (int) (Math.random() * 20 + 1) + 5; // Reduce damage by 100-199
+            gui.displayMessage(" Player Stats --  Speed: " + playerSpeed + "  Damage: " + playerDamage);
         } else if (choice == 2) {
             // Healer: high healing, low damage and shield
             gui.displayMessage("You chose Healer! Great recovery, but fragile.");
@@ -359,16 +360,19 @@ public class Game {
             playerShield -= (int) (Math.random() * 21) + 5; // Reduce shield by 5-50
 
             playerSpeed -= (int) (Math.random() * 10) + 1; // Reduce speed by 1-9
+            gui.displayMessage(" Player Stats --  Speed: " + playerSpeed + "  Damage: " + playerDamage + " Shield: " + playerShield);
+
         } else {
             // Ninja: high speed, low healing and health
             gui.displayMessage("You chose Ninja! Fast and deadly, but risky.");
             playerHeal -= (int) (Math.random() * 46) + 5; // Reduce heal by 5-50
             playerHealth -= (int) (Math.random() * 21) + 5; // Reduce max health by 5-25
 
-            playerSpeed -= (int) (Math.random() * 6) + 6; // Reduce speed by 1-9
+            playerSpeed -= (int) (Math.random() * 6) + 5; // Reduce speed by 1-9
         }
         if (playerHeal < 0)
             playerHeal = 0;
+            gui.displayMessage(" Player Stats --  Speed: " + playerSpeed + "  Healing Power: " + playerHeal + " Max Health: " + playerHealth);
 
         gui.setPlayerMaxHealth(playerHealth);
         gui.updatePlayerHealth(playerHealth);
@@ -430,3 +434,10 @@ public class Game {
     // - etc.
 
 }
+// special ideas
+// - remove monster speed
+// - auto kill all the slow monsters +\
+
+//private Monster livigmonster () {
+
+//}

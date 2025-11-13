@@ -32,7 +32,7 @@ public class InventoryPanel extends JPanel {
         setBackground(PANEL_BG);
         
         // Title
-        JLabel titleLabel = new JLabel("INVENTORY", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Special", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setForeground(Color.CYAN);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
@@ -86,7 +86,7 @@ public class InventoryPanel extends JPanel {
      * Show empty inventory message
      */
     private void showEmptyMessage() {
-        JLabel emptyLabel = new JLabel("No items", SwingConstants.CENTER);
+        JLabel emptyLabel = new JLabel("No Specail Abbilities", SwingConstants.CENTER);
         emptyLabel.setFont(ITEM_FONT);
         emptyLabel.setForeground(Color.GRAY);
         emptyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
