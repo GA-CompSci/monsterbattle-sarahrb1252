@@ -61,15 +61,24 @@ public class Game {
         // CHOOSE DIFFICULTY (number of monsters to face)
         int numMonsters = chooseDifficulty();
 
-        monsters = new ArrayList<>();
+     
+        //TODO : Make it so each of them have a random abbility
+
+        
+
         for (int k = 0; k < numMonsters; k++) {
             if (k == 0) { // Should we add special abbilities
                 // add a monster with a special ability
                 monsters.add(new Monster("Vampire"));
-            } else {
+            }else if (k==1) {
+                monsters.add(new Monster("Reflector"));
+            }else if (k==2){
+                monsters.add(new Monster("Fear 5th"));
+            }else{
                 monsters.add(new Monster());
-            }
-        }
+           } 
+         }
+        //}
         gui.updateMonsters(monsters);
 
         // PICK YOUR CHARACTER BUILD (using the 4 action buttons!)
@@ -87,9 +96,9 @@ public class Game {
         gui.setActionButtons(buttons);
 
         // Welcome message
-        gui.displayMessage("Battle Start! Make your move");
-    }
-
+        gui.displayMessage("Battle Start! Make your move"); 
+   
+        }
     /**
      * Main game loop
      * 
@@ -284,15 +293,22 @@ public class Game {
             if (!monster.special().isEmpty()) {
                 if (monster.special().equals("Vampire")) {
                     monster.heal(damageTaken/2);
-                    gui.displayMessage("This Monster is a vampire and can healed itself for" + damageTaken/2);
+                    gui.displayMessage("This Monster is a vampire and healed itself for" + damageTaken/2);
+                   
+
             
                 }else if (monster.special().equals("Reflecter")) {
                     playerHealth -= damageTaken *0.3;
                     gui.displayMessage("Oh No! The monster deflects"  + damageTaken * .3);
-            }else if (monster.special().equals("Final hit"))
-            // if player health is less than 30 then attacks double 
-                if(playerHealth < 30){
-                    
+
+                }else if (monster.special().equals("Fear 5th")){
+                    if(playerHealth %5 == 0){
+                        playerHealth -= monster.damage()*5;
+                }
+                gui.displayMessage(" This monster hates the number 5, your health was a multiple of 5 so your health was divided by 5!!");
+
+                }else if ( monster.special().equals("")){
+
                 }
 
             // Add more special abilities!
@@ -308,6 +324,7 @@ public class Game {
                 gui.displayMessage("Monster hits you for " + damageTaken + " damage!");
                 gui.updatePlayerHealth(playerHealth);
             }
+
             int index = monsters.indexOf(monster);
             gui.highlightMonster(index);
             gui.pause(300);
@@ -434,8 +451,8 @@ public class Game {
     // - etc.
 
 }
-// special ideas
-// - remove monster speed
+// specil ideas
+// - remaove monster speed
 // - auto kill all the slow monsters +\
 
 //private Monster livigmonster () {

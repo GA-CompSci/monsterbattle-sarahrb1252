@@ -4,7 +4,7 @@ public class Monster {
     private int health;
     private double damage;
     private int speed;
-    private String special; 
+    private String special = ""; 
 
     // CONSTRUCTOR
     public Monster(){
