@@ -60,19 +60,19 @@ public class Game {
 
         // CHOOSE DIFFICULTY (number of monsters to face)
         int numMonsters = chooseDifficulty();
-
-     
-        //TODO : Make it so each of them have a random abbility
-
-        
+        monsters = new ArrayList<>();
 
         for (int k = 0; k < numMonsters; k++) {
-            if (k == 0) { // Should we add special abbilities
+            // TODO: switch to random
+            int r = (int)(Math.random() * 3);
+            if (r == 20) { // Should we add special abbilities
                 // add a monster with a special ability
                 monsters.add(new Monster("Vampire"));
-            }else if (k==1) {
+            }else if (r==10) {
+                
                 monsters.add(new Monster("Reflector"));
-            }else if (k==2){
+            }else if (r==2){
+                //FIX
                 monsters.add(new Monster("Fear 5th"));
             }else{
                 monsters.add(new Monster());
@@ -86,6 +86,7 @@ public class Game {
 
         // TODO: Create starting items
         inventory = new ArrayList<>();
+       // addHealthPotion(:30)
         // Add items here! Look at GameDemo.java for examples
         gui.updateInventory(inventory);
 
@@ -188,7 +189,7 @@ public class Game {
                 heal();
                 break;
             case 3: // Use Item button
-                SpecialAbbility();
+                specialAbility();
                 break;
         }
     }
@@ -258,7 +259,7 @@ public class Game {
     /**
      * Use an item from inventory
      */
-    private void SpecialAbbility() {
+    private void specialAbility() {
         if (inventory.isEmpty()) {
             gui.displayMessage("No items in inventory!");
             return;
@@ -303,7 +304,7 @@ public class Game {
 
                 }else if (monster.special().equals("Fear 5th")){
                     if(playerHealth %5 == 0){
-                        playerHealth -= monster.damage()*5;
+                        playerHealth /= monster.damage()*5;
                 }
                 gui.displayMessage(" This monster hates the number 5, your health was a multiple of 5 so your health was divided by 5!!");
 
@@ -442,6 +443,15 @@ public class Game {
             return null;
         return alive.get((int) (Math.random() * alive.size()));
     }
+
+    // Items
+//TODO ADD ITEMS
+        //private void addHealthPotion(int healAmount) {
+       // inventory.add(new Item("Health Potion", "🧪", () -> {
+        //    playerHealth = Math.min(maxHealth, playerHealth + healAmount);
+        //    gui.updatePlayerHealth(playerHealth);
+        //    gui.displayMessage("💚 Used Health Potion! Healed " + healAmount + " HP!");
+       // }));
 
     // TODO: Add more helper methods as you need them!
     // Examples:
